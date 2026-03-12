@@ -1,0 +1,30 @@
+# Keil build artifacts
+*.axf
+*.crf
+*.d
+*.o
+*.lst
+*.htm
+*.lnp
+*.map
+*.dep
+*.bak
+*.uvgui
+*.uvgui.*
+*.uvgui_*
+
+# HEX files (generated — not committed)
+*.hex
+
+# Keil backup files
+*_uvopt.bak
+*_uvproj.bak
+
+# Windows system files
+Thumbs.db
+desktop.ini
+
+# Editor files
+.vscode/
+*.swp
+*.swo
