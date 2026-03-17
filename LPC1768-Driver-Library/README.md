@@ -12,7 +12,7 @@
 
 ---
 
-## ⚡ Quick Start — 5 Minutes to First Blink
+## Quick Start — 5 Minutes to First Blink
 
 ```
 1. Install Keil µVision 4          →  see tools/keil_setup.md
@@ -22,14 +22,14 @@
 5. Open Flash Magic → select LPC1768, COM port, Baud 9600
 6. Load gpio.hex → click Start
 7. Press RESET on the trainer board
-8. Watch LED at P1.18 blink! ✨
+8. Watch LED at P1.18 blink! 
 ```
 
 No hardware? → See [`docs/08_keil_simulation.md`](docs/08_keil_simulation.md) to run in software simulation.
 
 ---
 
-## 📖 About This Repository
+## About This Repository
 
 This repository contains custom peripheral drivers written in **C** for the **NXP LPC1768 ARM Cortex-M3** microcontroller, tested on the **RDL Technologies LPC1768 Trainer Kit**.
 
@@ -41,7 +41,7 @@ Documentation style is inspired by CMSIS, Linux kernel drivers, and industrial H
 
 ---
 
-## 🏗️ LPC1768 Overview
+## LPC1768 Overview
 
 | Feature | Detail |
 |---------|--------|
@@ -59,7 +59,7 @@ Documentation style is inspired by CMSIS, Linux kernel drivers, and industrial H
 
 ---
 
-## 🛠️ Trainer Board — RDL Technologies LPC1768 Kit
+## Trainer Board — RDL Technologies LPC1768 Kit
 
 The **RDL Technologies LPC1768 Trainer Kit** is the target hardware for all drivers. It provides:
 
@@ -78,7 +78,7 @@ The **RDL Technologies LPC1768 Trainer Kit** is the target hardware for all driv
 
 ---
 
-## 📦 Implemented Drivers
+## Implemented Drivers
 
 | Driver | Peripheral | Port/Pins | Test Output |
 |--------|-----------|-----------|-------------|
@@ -99,7 +99,7 @@ The **RDL Technologies LPC1768 Trainer Kit** is the target hardware for all driv
 
 ---
 
-## 🗂️ Repository Structure
+## Repository Structure
 
 ```
 LPC1768-Driver-Library/
@@ -145,7 +145,7 @@ LPC1768-Driver-Library/
 
 ---
 
-## 🔧 Development Environment
+## Development Environment
 
 | Tool | Version | Purpose |
 |------|---------|---------|
@@ -158,7 +158,7 @@ Setup instructions: [`tools/keil_setup.md`](tools/keil_setup.md)
 
 ---
 
-## 📚 Documentation Sections
+## Documentation Sections
 
 | File | Topic |
 |------|-------|
@@ -174,7 +174,7 @@ Setup instructions: [`tools/keil_setup.md`](tools/keil_setup.md)
 
 ---
 
-## 🚀 Future Work
+## Future Work
 
 | Driver | Description |
 |--------|-------------|
@@ -188,7 +188,7 @@ Setup instructions: [`tools/keil_setup.md`](tools/keil_setup.md)
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the **MIT License**.  
 See [LICENSE](LICENSE) for details.
