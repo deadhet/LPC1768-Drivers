@@ -8,14 +8,14 @@
 ![Board](https://img.shields.io/badge/Board-RDL%20Trainer%20Kit-red)
 
 > **A complete, beginner-friendly driver library and learning manual for the LPC1768 ARM Cortex-M3 microcontroller.**  
-> Every peripheral is documented from theory to hardware testing — register-level, line-by-line.
+> Every peripheral is documented from theory to hardware testing: register-level, line-by-line.
 
 ---
 
 ## Quick Start — 5 Minutes to First Blink
 
 ```
-1. Install Keil µVision 4          →  see tools/keil_setup.md
+1. Install Keil µVision 4  →  see tools/keil_setup.md
 2. Open drivers/gpio/gpio.uvproj
 3. Press F7 to Build
 4. Locate gpio.hex in the project folder
@@ -35,7 +35,7 @@ This repository contains custom peripheral drivers written in **C** for the **NX
 
 It serves as both:
 - A **production-quality driver library** for embedded development
-- A **complete learning manual** — from microcontroller architecture to hardware testing
+- A **complete learning manual** from microcontroller architecture to hardware testing
 
 Documentation style is inspired by CMSIS, Linux kernel drivers, and industrial HAL frameworks.
 
@@ -59,7 +59,7 @@ Documentation style is inspired by CMSIS, Linux kernel drivers, and industrial H
 
 ---
 
-## Trainer Board — RDL Technologies LPC1768 Kit
+## Trainer Board: RDL Technologies LPC1768 Kit
 
 The **RDL Technologies LPC1768 Trainer Kit** is the target hardware for all drivers. It provides:
 
@@ -195,4 +195,4 @@ See [LICENSE](LICENSE) for details.
 
 ---
 
-*Built for the embedded systems community — learn by reading, understand by doing.*
+*Built for the embedded systems community: learn by reading, understand by doing.*
