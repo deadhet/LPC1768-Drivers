@@ -1,8 +1,8 @@
-# RTC Driver — LPC1768
+# RTC Driver: LPC1768
 
 ## 1. Driver Overview
 
-The **Real-Time Clock (RTC)** is a specialized peripheral that maintains accurate time and date information. Unlike Timer0 which counts general-purpose timer ticks, the RTC is designed specifically to count seconds, minutes, hours, days, months, and years. The RTC has dedicated registers for each time unit, and the hardware automatically handles the increment logic — seconds roll over at 60 and trigger a minute increment, minutes roll over at 60 and trigger an hour increment, and so on.
+The **Real-Time Clock (RTC)** is a specialized peripheral that maintains accurate time and date information. Unlike Timer0 which counts general-purpose timer ticks, the RTC is designed specifically to count seconds, minutes, hours, days, months, and years. The RTC has dedicated registers for each time unit, and the hardware automatically handles the increment logic seconds roll over at 60 and trigger a minute increment, minutes roll over at 60 and trigger an hour increment, and so on.
 
 The LPC1768 RTC can continue running from a separate 3.3V backup battery even when the main system is powered off, preserving time across power cycles. On the trainer board, the RTC is powered from the main supply.
 
@@ -17,7 +17,7 @@ The LPC1768 RTC can continue running from a separate 3.3V backup battery even wh
 | Signal | Description |
 |--------|-------------|
 | RTC peripheral (internal) | No external pins needed for timekeeping |
-| UART0 (P0.2/P0.3) | Debug output — prints current time to serial terminal |
+| UART0 (P0.2/P0.3) | Debug output: prints current time to serial terminal |
 
 The RTC is entirely internal. It is driven by the system's 32.768 kHz crystal oscillator (XTAL1/XTAL2), though it can also be clocked from the main PLL.
 
@@ -129,7 +129,7 @@ void RTC_SetTime(uint8_t hr, uint8_t min, uint8_t sec)
 }
 ```
 
-These registers are simply written with the desired values. The hardware accepts the write immediately. Writing while the RTC is running is allowed — the new value becomes the current count. Care should be taken not to write inconsistent values (e.g., writing SEC = 59, then the hardware increments it to 60, which rolls over and increments MIN before you write MIN).
+These registers are simply written with the desired values. The hardware accepts the write immediately. Writing while the RTC is running is allowed, the new value becomes the current count. Care should be taken not to write inconsistent values (e.g., writing SEC = 59, then the hardware increments it to 60, which rolls over and increments MIN before you write MIN).
 
 In practice, it is safest to stop the RTC (CCR[0] = 0), write all time registers, then restart (CCR[0] = 1).
 
@@ -144,7 +144,7 @@ void RTC_GetTime(uint8_t *hr, uint8_t *min, uint8_t *sec)
 }
 ```
 
-The time registers are directly readable at any time. The RTC hardware updates them autonomously in the background. Each read returns the current value at that instant. For time-critical applications, you should be aware that a rollover could occur between reading SEC and reading MIN, giving an inconsistent snapshot (e.g., SEC=59 read just before rollover, MIN read just after). For a display clock this is typically acceptable.
+The time registers are directly readable at any time. The RTC hardware updates them autonomously in the background. Each read returns the current value at that instant. For time critical applications, you should be aware that a rollover could occur between reading SEC and reading MIN, giving an inconsistent snapshot (e.g., SEC=59 read just before rollover, MIN read just after). For a display clock this is typically acceptable.
 
 ## 7. Test Program Explanation
 
@@ -158,7 +158,7 @@ As the firmware runs, the seconds increment on screen, demonstrating that the RT
 
 ## 8. Hardware Testing Procedure
 
-### Expected Output (PuTTY, 9600 baud)
+### Expected Output (Flash Magic, 9600 baud)
 ```
 Time: 10:30:00
 Time: 10:30:01
