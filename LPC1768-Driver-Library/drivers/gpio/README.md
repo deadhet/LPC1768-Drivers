@@ -25,11 +25,11 @@ This driver abstracts all four GPIO ports (PORT0–PORT3) behind a clean API usi
 LPC1768 P1.18 → Onboard LED1 (through current limiting resistor on board)
 ```
 
-No external wiring needed — LED is soldered on the trainer board. P1.18 drives the LED anode through a series resistor; asserting HIGH lights the LED.
+No external wiring needed LED is soldered on the trainer board. P1.18 drives the LED anode through a series resistor; asserting HIGH lights the LED.
 
 ## 3. Registers Used
 
-### FIODIR — Fast I/O Direction Register
+### FIODIR: Fast I/O Direction Register
 
 Each GPIO port has its own FIODIR register (LPC_GPIO0->FIODIR, LPC_GPIO1->FIODIR, etc.). Each bit in FIODIR corresponds to one pin on that port:
 
@@ -38,21 +38,21 @@ Each GPIO port has its own FIODIR register (LPC_GPIO0->FIODIR, LPC_GPIO1->FIODIR
 
 FIODIR is 32 bits wide. The LPC1768 has ports with varying numbers of implemented pins, but the register is always 32 bits. Unused bits simply have no hardware effect.
 
-**Key property:** The GPIO peripheral clock is always active on the LPC1768 — no PCONP bit needs to be set. GPIO is always available.
+**Key property:** The GPIO peripheral clock is always active on the LPC1768: no PCONP bit needs to be set. GPIO is always available.
 
-### FIOSET — Fast I/O Set Register
+### FIOSET: Fast I/O Set Register
 
-Writing a 1 to a bit in FIOSET drives the corresponding output pin HIGH. Writing a 0 to a bit has no effect — it does not pull the pin LOW. This means you can set multiple pins HIGH simultaneously without affecting other pins.
+Writing a 1 to a bit in FIOSET drives the corresponding output pin HIGH. Writing a 0 to a bit has no effect it does not pull the pin LOW. This means you can set multiple pins HIGH simultaneously without affecting other pins.
 
 This is an important safety property. If you wrote directly to FIOPIN to set pins HIGH, you would have to read the current state, OR in your bits, then write back (read-modify-write). FIOSET and FIOCLR eliminate this requirement for atomic pin control.
 
-### FIOCLR — Fast I/O Clear Register
+### FIOCLR: Fast I/O Clear Register
 
 Writing a 1 to a bit in FIOCLR drives the corresponding output pin LOW. Writing a 0 has no effect. Like FIOSET, this allows atomic clearing of specific pins without affecting others.
 
-### FIOPIN — Fast I/O Pin Register
+### FIOPIN: Fast I/O Pin Register
 
-This register reflects the actual current state of the port pins. Reading it returns the current logic level on all 32 pins, regardless of whether they are configured as inputs or outputs. Writing to FIOPIN sets the output value of all output pins simultaneously (inputs are unaffected), but this is rarely used — FIOSET and FIOCLR are preferred for safety.
+This register reflects the actual current state of the port pins. Reading it returns the current logic level on all 32 pins, regardless of whether they are configured as inputs or outputs. Writing to FIOPIN sets the output value of all output pins simultaneously (inputs are unaffected), but this is rarely used: FIOSET and FIOCLR are preferred for safety.
 
 ## 4. Driver Architecture
 
@@ -108,7 +108,7 @@ Drives specified pins LOW. Uses FIOCLR for atomic operation.
 
 ### `GPIO_Read(uint8_t port)`
 
-Returns `uint32_t` — the full 32-bit pin state of the port. Use bit masking to extract individual pins.
+Returns `uint32_t`: the full 32-bit pin state of the port. Use bit masking to extract individual pins.
 
 ## 6. Code Walkthrough
 
@@ -147,7 +147,7 @@ void GPIO_Set(uint8_t port, uint32_t pins)
 }
 ```
 
-Writing `(1 << 18)` to LPC_GPIO1->FIOSET causes only bit 18 of the port to go HIGH. The FIOSET register is write-only in effect — bits written as 0 are ignored. This means the operation is inherently atomic: no read-then-modify step is needed.
+Writing `(1 << 18)` to LPC_GPIO1->FIOSET causes only bit 18 of the port to go HIGH. The FIOSET register is write-only in effect bits written as 0 are ignored. This means the operation is inherently atomic: no read-then-modify step is needed.
 
 When FIOSET sets a pin HIGH on an output pin, the internal driver circuit pulls that pin up to the supply voltage (3.3V on the LPC1768). For LED1 at P1.18, this forward-biases the LED through its series resistor, causing it to emit light.
 
