@@ -1,4 +1,4 @@
-# UART Driver — LPC1768
+# UART Driver - LPC1768
 
 ## 1. Driver Overview
 
