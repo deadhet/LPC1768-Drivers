@@ -32,7 +32,7 @@ P0.3 (RX) ←───── TX ←───────────────
 
 ## 3. Registers Used
 
-### LPC_SC→PCONP — Peripheral Power Control
+### LPC_SC→PCONP: Peripheral Power Control
 
 The PCONP (Power Control for Peripherals) register controls which peripherals receive power and a clock signal. By default, most peripherals are powered off to save energy. You must set the appropriate bit before accessing any peripheral's registers. Writing to a powered-off peripheral produces unpredictable results.
 
@@ -40,7 +40,7 @@ The PCONP (Power Control for Peripherals) register controls which peripherals re
 |-----|-------|-------|-------------|
 | 3 | PCUART0 | 1 | Enable UART0 power and clock |
 
-### LPC_PINCON→PINSEL0 — Pin Select Register
+### LPC_PINCON→PINSEL0: Pin Select Register
 
 Every physical pin on the LPC1768 can be connected to multiple internal functions. The PINSEL registers control which function each pin performs. Each pin uses 2 bits in the PINSEL register:
 
@@ -56,7 +56,7 @@ Every physical pin on the LPC1768 can be connected to multiple internal function
 | [5:4] | P0.2 | 01 | TXD0 |
 | [7:6] | P0.3 | 01 | RXD0 |
 
-### LPC_UART0→LCR — Line Control Register
+### LPC_UART0→LCR: Line Control Register
 
 The LCR configures the data frame format. It also contains the DLAB (Divisor Latch Access Bit), which is a special control bit that temporarily redirects addresses of other registers to expose the baud rate divisor latches.
 
@@ -67,7 +67,7 @@ The LCR configures the data frame format. It also contains the DLAB (Divisor Lat
 | [3] | PE | 0 | No parity |
 | [7] | DLAB | 1 then 0 | 1=access DLL/DLM, 0=normal operation |
 
-### LPC_UART0→DLL / DLM — Divisor Latch Registers
+### LPC_UART0→DLL / DLM: Divisor Latch Registers
 
 These two registers store the baud rate divisor. They are only accessible when DLAB=1 in LCR. The divisor is a 16-bit value split across two 8-bit registers.
 
@@ -80,7 +80,7 @@ DLM = (162 >> 8) & 0xFF = 0x00  (upper 8 bits)
 
 The factor of 16 comes from the UART's internal oversampling: it samples each bit 16 times and uses majority voting to determine the bit value, which makes it more immune to noise.
 
-### LPC_UART0→FCR — FIFO Control Register
+### LPC_UART0→FCR: FIFO Control Register
 
 The FIFO (First-In First-Out) buffer is a small hardware queue that can hold up to 16 bytes before the CPU needs to read them. This prevents data loss if the CPU is momentarily busy.
 
@@ -90,7 +90,7 @@ The FIFO (First-In First-Out) buffer is a small hardware queue that can hold up 
 | 1 | RXFIFORES | 1 | Reset RX FIFO (discard leftover bytes) |
 | 2 | TXFIFORES | 1 | Reset TX FIFO (discard pending TX bytes) |
 
-### LPC_UART0→LSR — Line Status Register
+### LPC_UART0→LSR: Line Status Register
 
 The LSR is a read-only status register that reflects the current state of the UART hardware.
 
@@ -99,11 +99,11 @@ The LSR is a read-only status register that reflects the current state of the UA
 | 0 | RDR | 1 = Receive data ready (data available in RBR) |
 | 5 | THRE | 1 = Transmit Holding Register Empty (OK to send next byte) |
 
-### LPC_UART0→THR — Transmit Holding Register
+### LPC_UART0→THR: Transmit Holding Register
 
 Writing a byte to THR causes the UART hardware to immediately begin serializing and transmitting that byte on the TX pin. The hardware handles shifting, start bit, stop bit, and timing autonomously once the byte is loaded.
 
-### LPC_UART0→RBR — Receive Buffer Register
+### LPC_UART0→RBR: Receive Buffer Register
 
 When UART hardware receives a complete byte on the RX pin, it stores it in RBR. Reading RBR retrieves the received byte and clears the RDR flag in LSR.
 
@@ -156,7 +156,7 @@ Waits for and returns one received character from RBR.
 Sends a null-terminated string character by character.
 
 ### `UART0_Printf(const char *format, ...)`
-Formatted print — uses `vsprintf()` internally into a 100-byte buffer, then sends via `UART0_SendString()`.
+Formatted print uses `vsprintf()` internally into a 100-byte buffer, then sends via `UART0_SendString()`.
 
 ## 6. Code Walkthrough
 
@@ -166,7 +166,7 @@ Formatted print — uses `vsprintf()` internally into a 100-byte buffer, then se
 LPC_SC->PCONP |= (1 << 3);
 ```
 
-`LPC_SC->PCONP` is the System Control Peripheral Power register located at address 0x400FC0C4. Each bit in this register controls whether a specific peripheral receives a clock signal from the PLL. Bit 3 corresponds to UART0. The `|=` operator sets bit 3 while leaving all other bits unchanged — this ensures other peripherals that are already powered on (like Timer0, GPIO, etc.) are not accidentally disabled.
+`LPC_SC->PCONP` is the System Control Peripheral Power register located at address 0x400FC0C4. Each bit in this register controls whether a specific peripheral receives a clock signal from the PLL. Bit 3 corresponds to UART0. The `|=` operator sets bit 3 while leaving all other bits unchanged this ensures other peripherals that are already powered on (like Timer0, GPIO, etc.) are not accidentally disabled.
 
 Without this step, any write to UART0 registers would have no effect because the hardware has no clock to operate with.
 
@@ -179,11 +179,11 @@ LPC_PINCON->PINSEL0 |=  ((1 << 4) | (1 << 6));
 
 PINSEL0 controls the function of pins P0.0 through P0.15. Each pin uses 2 consecutive bits. P0.2 occupies bits [5:4] and P0.3 occupies bits [7:6].
 
-The first line clears both 2-bit fields to 00 (GPIO mode). The value `(3 << 4)` is binary `110000` — it creates a mask covering bits 5 and 4. Using `&= ~` clears those bits without affecting others. The same happens for `(3 << 6)` for bits 7 and 6.
+The first line clears both 2-bit fields to 00 (GPIO mode). The value `(3 << 4)` is binary `110000` it creates a mask covering bits 5 and 4. Using `&= ~` clears those bits without affecting others. The same happens for `(3 << 6)` for bits 7 and 6.
 
 The second line sets both fields to 01, which selects alternate function 1: TXD0 for P0.2 and RXD0 for P0.3. Writing `(1 << 4)` sets bit 4, giving PINSEL0[5:4] = 01. Writing `(1 << 6)` sets bit 6, giving PINSEL0[7:6] = 01.
 
-After this, the physical pins P0.2 and P0.3 are no longer general-purpose GPIO — they are now internally connected to the UART0 transmitter and receiver hardware.
+After this, the physical pins P0.2 and P0.3 are no longer general-purpose GPIO they are now internally connected to the UART0 transmitter and receiver hardware.
 
 ### Step 3: Baud Rate Calculation
 
@@ -224,7 +224,7 @@ Writing `(3 << 0)` sets bits [1:0] to 11, which selects 8-bit word length. All o
 LPC_UART0->FCR = (1 << 0) | (1 << 1) | (1 << 2);
 ```
 
-This writes 0x07 to FCR. Bit 0 (FIFOEN) enables the FIFO buffer. Bit 1 (RXFIFORES) clears and resets the RX FIFO — any stale data from before initialization is discarded. Bit 2 (TXFIFORES) similarly resets the TX FIFO. This must be done during initialization to start with clean buffers.
+This writes 0x07 to FCR. Bit 0 (FIFOEN) enables the FIFO buffer. Bit 1 (RXFIFORES) clears and resets the RX FIFO any stale data from before initialization is discarded. Bit 2 (TXFIFORES) similarly resets the TX FIFO. This must be done during initialization to start with clean buffers.
 
 ### Step 7: Sending a Character
 
@@ -256,13 +256,13 @@ Bit 0 of LSR is the RDR (Receive Data Ready) flag. It is set to 1 by hardware wh
 
 The test program (main.c) demonstrates all four driver functions:
 
-1. `SystemInit()` — sets up the PLL to run the CPU at 100 MHz
-2. `UART0_Init(9600)` — initializes UART0 at 9600 baud
-3. `UART0_SendString("UART Driver Test Started\r\n")` — startup banner
+1. `SystemInit()` - sets up the PLL to run the CPU at 100 MHz
+2. `UART0_Init(9600)` - initializes UART0 at 9600 baud
+3. `UART0_SendString("UART Driver Test Started\r\n")` - startup banner
 4. Inside `while(1)`:
-   - `UART0_Printf("Hello from LPC1768 UART Driver\r\n")` — sends periodically
-   - `delay()` — software loop (~500k iterations)
-   - Checks `LPC_UART0->LSR & (1 << 0)` directly — if data arrived, reads and echoes it back
+   - `UART0_Printf("Hello from LPC1768 UART Driver\r\n")` - sends periodically
+   - `delay()` - software loop (~500k iterations)
+   - Checks `LPC_UART0->LSR & (1 << 0)` directly - if data arrived, reads and echoes it back
 
 The `\r\n` at the end of strings sends both carriage return and line feed, which is required by most terminal emulators to move the cursor to the beginning of the next line.
 
