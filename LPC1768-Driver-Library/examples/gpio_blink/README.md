@@ -1,6 +1,6 @@
 # Example: GPIO Blink
 
-This example demonstrates the simplest possible embedded program — blinking an LED using the GPIO driver.
+This example demonstrates the simplest possible embedded program: blinking an LED using the GPIO driver.
 
 ## What This Example Does
 - Configures P1.18 as GPIO output
