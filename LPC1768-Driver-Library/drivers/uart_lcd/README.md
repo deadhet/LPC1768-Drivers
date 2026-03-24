@@ -1,13 +1,13 @@
-# UART + LCD Combined Driver — LPC1768
+# UART + LCD Combined Driver - LPC1768
 
 ## 1. Driver Overview
 
-The **UART-LCD** project demonstrates the simultaneous operation of two completely independent peripheral drivers in a single embedded application — **UART0** for serial communication and a **16×2 HD44780 LCD** for display output. Characters typed in a PC terminal (PuTTY) are received over UART, displayed on the LCD, and echoed back to the terminal.
+The **UART-LCD** project demonstrates the simultaneous operation of two completely independent peripheral drivers in a single embedded application: **UART0** for serial communication and a **16×2 HD44780 LCD** for display output. Characters typed in a PC terminal (PuTTY) are received over UART, displayed on the LCD, and echoed back to the terminal.
 
 This is a practical example of multi-peripheral integration: both drivers share the same CPU but operate on entirely different hardware peripherals with no conflict. UART0 uses PORT0 pins and involves the UART peripheral registers. The LCD uses PORT1 GPIO pins and communicates via a 4-bit parallel interface.
 
 **Real-world applications:**
-- HMI (Human-Machine Interface) — serial command to LCD display
+- HMI (Human-Machine Interface): serial command to LCD display
 - Terminal-controlled embedded systems
 - Serial protocol proxy terminals
 - Embedded shell/debug consoles
@@ -111,7 +111,7 @@ If `ch` is 'A' (ASCII 65 = 0x41): upper nibble = 0x4, lower nibble = 0x1. These 
 UART0_SendChar(ch);
 ```
 
-`UART0_SendChar()` waits for `LPC_UART0->LSR` bit 5 (THRE = Transmit Holding Register Empty) to be 1, then writes the character to `LPC_UART0->THR`. The UART hardware serializes and transmits the byte back to the PC terminal. This creates an echo effect — the terminal displays what you typed, confirming the round trip: PC → LPC (UART RX) → LCD display → LPC → PC (UART TX echo).
+`UART0_SendChar()` waits for `LPC_UART0->LSR` bit 5 (THRE = Transmit Holding Register Empty) to be 1, then writes the character to `LPC_UART0->THR`. The UART hardware serializes and transmits the byte back to the PC terminal. This creates an echo effect the terminal displays what you typed, confirming the round trip: PC → LPC (UART RX) → LCD display → LPC → PC (UART TX echo).
 
 ### Row Overflow Handling
 
