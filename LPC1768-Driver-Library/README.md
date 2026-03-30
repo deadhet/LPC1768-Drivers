@@ -12,7 +12,7 @@
 
 ---
 
-## Quick Start — 5 Minutes to First Blink
+## Quick Start: 5 Minutes to First Blink
 
 ```
 1. Install Keil µVision 4  →  see tools/keil_setup.md
@@ -149,7 +149,7 @@ LPC1768-Driver-Library/
 
 | Tool | Version | Purpose |
 |------|---------|---------|
-| Keil µVision | 4 / 5 | IDE — compile, build, debug, simulate |
+| Keil µVision | 4 / 5 | IDE: compile, build, debug, simulate |
 | Flash Magic | Latest | Flashing HEX via UART/USB |
 | FTDI Drivers | Latest | USB-to-Serial (COM port) |
 | PuTTY / Tera Term | Any | Serial terminal (9600 8N1) |
