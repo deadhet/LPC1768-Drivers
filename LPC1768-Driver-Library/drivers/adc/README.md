@@ -1,4 +1,4 @@
-# ADC Driver — LPC1768
+# ADC Driver: LPC1768
 
 ## 1. Driver Overview
 
@@ -26,7 +26,7 @@ This driver reads from **ADC Channel 1** connected to the onboard 10K potentiome
 **Connection:**
 ```
 Potentiometer wiper ──→ P0.24 (AD0.1)
-(Onboard — no external wiring needed on trainer kit)
+(Onboard - no external wiring needed on trainer kit)
 ```
 
 **Output range:** 0 (0V input) to 4095 (3.3V input)
@@ -38,7 +38,7 @@ Voltage = (ADC_Value / 4095) × 3.3V
 
 ## 3. Registers Used
 
-### LPC_SC→PCONP — Peripheral Power Control
+### LPC_SC→PCONP: Peripheral Power Control
 
 | Bit | Value | Description |
 |-----|-------|-------------|
@@ -46,7 +46,7 @@ Voltage = (ADC_Value / 4095) × 3.3V
 
 Without enabling bit 12 in PCONP, the ADC hardware has no clock and all register writes are ignored.
 
-### LPC_SC→PCLKSEL0 — Peripheral Clock Select
+### LPC_SC→PCLKSEL0: Peripheral Clock Select
 
 | Bits | Value | PCLK divisor | Resulting PCLK |
 |------|-------|-------------|----------------|
@@ -55,9 +55,9 @@ Without enabling bit 12 in PCONP, the ADC hardware has no clock and all register
 | [25:24] | 10 | CCLK/2 | 50 MHz |
 | [25:24] | 11 | CCLK/8 | 12.5 MHz |
 
-This driver clears bits [25:24] to 00, giving ADC a 25 MHz input clock.
+This driver clears bits [25:24] to 00, giving ADC a **25 MHz** input clock.
 
-### LPC_PINCON→PINSEL1 — Pin Select Register
+### LPC_PINCON→PINSEL1: Pin Select Register
 
 PINSEL1 controls P0.16 through P0.31. Each pin uses 2 bits. P0.24 occupies bits [17:16]:
 
@@ -65,9 +65,9 @@ PINSEL1 controls P0.16 through P0.31. Each pin uses 2 bits. P0.24 occupies bits 
 |------|-----|-------|---------|
 | [17:16] | P0.24 | 01 | AD0.1 (analog input mode) |
 
-Setting these bits to 01 connects pin P0.24 to the ADC analog input mux. Importantly, this also disables the digital input buffer on that pin — the pin is now purely analog and will not interfere with the ADC measurement.
+Setting these bits to 01 connects pin P0.24 to the ADC analog input mux. Importantly, this also disables the digital input buffer on that pin, the pin is now purely analog and will not interfere with the ADC measurement.
 
-### LPC_ADC→ADCR — ADC Control Register
+### LPC_ADC→ADCR: ADC Control Register
 
 This is the primary control register for the ADC. It configures the channel, clock, power state, and conversion triggers.
 
@@ -80,7 +80,7 @@ This is the primary control register for the ADC. It configures the channel, clo
 
 The CLKDIV value controls the ADC clock. The LPC1768 ADC requires a clock ≤ 13 MHz. With PCLK=25 MHz and CLKDIV=4, the ADC clock is 25/5 = 5 MHz, which is safely within spec.
 
-### LPC_ADC→ADGDR — ADC Global Data Register
+### LPC_ADC→ADGDR: ADC Global Data Register
 
 After conversion completes, the result is available in ADGDR:
 
@@ -91,7 +91,7 @@ After conversion completes, the result is available in ADGDR:
 | [26:24] | CHN | Channel number that produced this result |
 | [31] | DONE | 1 = conversion complete |
 
-The result is in bits [15:4] — shifted left by 4 bits. To extract just the 12-bit result, shift right by 4 and mask with 0xFFF.
+The result is in bits [15:4] which is shifted left by 4 bits. To extract just the 12-bit result, shift right by 4 and mask with 0xFFF.
 
 ## 4. Driver Architecture
 
