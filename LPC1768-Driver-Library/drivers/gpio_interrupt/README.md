@@ -1,4 +1,4 @@
-# GPIO Interrupt Driver — LPC1768
+# GPIO Interrupt Driver: LPC1768
 
 ## 1. Driver Overview
 
@@ -23,7 +23,7 @@ On the LPC1768, GPIO interrupts on PORT0 and PORT2 are routed through the **EINT
 
 ## 3. Registers Used
 
-### LPC_GPIO2→FIODIR — Direction Register
+### LPC_GPIO2→FIODIR: Direction Register
 
 ```c
 LPC_GPIO2->FIODIR &= ~(1 << 10);
@@ -31,7 +31,7 @@ LPC_GPIO2->FIODIR &= ~(1 << 10);
 
 Clearing bit 10 of FIODIR makes P2.10 an input. `~(1 << 10)` is the bitwise complement of `0x00000400`, which is `0xFFFFFBFF`. The `&=` clears only bit 10 while leaving all other direction bits unchanged.
 
-### LPC_GPIOINT→IO2IntEnR — Port 2 Rising Edge Interrupt Enable
+### LPC_GPIOINT→IO2IntEnR: Port 2 Rising Edge Interrupt Enable
 
 The `LPC_GPIOINT` peripheral block controls interrupt configuration for GPIO ports 0 and 2. The `IO2IntEnR` register enables rising edge interrupt detection per pin for PORT2.
 
@@ -47,7 +47,7 @@ The NVIC is the Cortex-M3 interrupt controller. Even when the GPIO interrupt is 
 
 PORT0 and PORT2 GPIO interrupts share the EINT3 vector. Within the ISR, the code must check status registers to determine which port and which pin caused the interrupt.
 
-### LPC_GPIOINT→IO2IntStatR — Port 2 Rising Edge Status
+### LPC_GPIOINT→IO2IntStatR: Port 2 Rising Edge Status
 
 This read-only register shows which PORT2 pin(s) triggered a rising edge interrupt.
 
@@ -57,7 +57,7 @@ if (LPC_GPIOINT->IO2IntStatR & (1 << 10))
 
 Checking bit 10 confirms that P2.10 was the source of the interrupt, not some other pin that may also be configured with interrupts.
 
-### LPC_GPIOINT→IO2IntClr — Port 2 Interrupt Clear
+### LPC_GPIOINT→IO2IntClr: Port 2 Interrupt Clear
 
 ```c
 LPC_GPIOINT->IO2IntClr = (1 << 10);
@@ -111,7 +111,7 @@ LPC_GPIOINT->IO2IntEnR |= (1 << 10);
 
 The GPIOINT peripheral has separate registers for PORT0 and PORT2, and separate registers for rising and falling edges. This line enables rising edge detection on P2.10. There is a corresponding `IO2IntEnF` register for falling edge detection, which is not used here.
 
-Rising edge detection means the interrupt fires on the LOW-to-HIGH transition. Since the button pulls LOW when pressed, the interrupt fires when the button is released — this is a common design choice to avoid triggering during the press-hold period.
+Rising edge detection means the interrupt fires on the LOW-to-HIGH transition. Since the button pulls LOW when pressed, the interrupt fires when the button is released, this is a common design choice to avoid triggering during the press-hold period.
 
 ### Enabling the NVIC
 
@@ -126,7 +126,7 @@ After this call, when P2.10 rises, the hardware:
 2. Asserts the EINT3 interrupt to the NVIC
 3. NVIC suspends the current code and calls EINT3_IRQHandler
 
-### The ISR — Interrupt Service Routine
+### The ISR - Interrupt Service Routine
 
 ```c
 void EINT3_IRQHandler(void)
@@ -141,11 +141,11 @@ void EINT3_IRQHandler(void)
 }
 ```
 
-The ISR begins by checking IO2IntStatR to confirm P2.10 caused the interrupt. This check is important because PORT0 and PORT2 share EINT3 — if a PORT0 pin also had an interrupt enabled and fired simultaneously, both would need to be handled.
+The ISR begins by checking IO2IntStatR to confirm P2.10 caused the interrupt. This check is important because PORT0 and PORT2 share EINT3 if a PORT0 pin also had an interrupt enabled and fired simultaneously, both would need to be handled.
 
 The interrupt is cleared immediately after confirmation, before any processing. Writing 1 to IO2IntClr bit 10 clears the pending flag in the GPIOINT hardware. The NVIC automatically runs only one interrupt handler per event, but if the flag is not cleared, re-entry will occur after return.
 
-`LPC_GPIO1->FIOPIN ^= (1 << 18)` uses XOR to toggle bit 18. If bit 18 was 1 (LED on), XOR with 1 makes it 0 (LED off). If it was 0, XOR makes it 1. The `^=` is a read-modify-write operation on FIOPIN — since the FIOPIN register reflects actual pin states, reading it gives the current output value, XOR flips the target bit, and writing it back updates the output.
+`LPC_GPIO1->FIOPIN ^= (1 << 18)` uses XOR to toggle bit 18. If bit 18 was 1 (LED on), XOR with 1 makes it 0 (LED off). If it was 0, XOR makes it 1. The `^=` is a read-modify-write operation on FIOPIN, since the FIOPIN register reflects actual pin states, reading it gives the current output value, XOR flips the target bit, and writing it back updates the output.
 
 `gpio_irq_flag ^= 1` toggles a software variable. Main code can read this flag to know how many button presses occurred.
 
@@ -156,7 +156,7 @@ Main.c sets P1.18 as an output and enters an empty infinite loop. All functional
 ## 8. Hardware Testing Procedure
 
 ### Expected Output
-Each press of the user button at P2.10 toggles LED P1.18. Main loop does nothing — all action is in the ISR.
+Each press of the user button at P2.10 toggles LED P1.18. Main loop does nothing all action is in the ISR.
 
 ### Init Flow Summary
 ```
