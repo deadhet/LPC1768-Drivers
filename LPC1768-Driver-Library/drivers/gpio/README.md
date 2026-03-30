@@ -1,4 +1,4 @@
-# GPIO Driver — LPC1768
+# GPIO Driver: LPC1768
 
 ## 1. Driver Overview
 
